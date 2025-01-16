@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - Marketplace</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">JeRseYku</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item active"><a class="nav-link" href="shop.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Shop Section -->
+  <div class="container mt-5">
+    <h2 class="text-center">Shop Products</h2>
+    <div class="row" id="product-container">
+      <!-- Dynamic product cards will be generated here -->
+    </div>
+    <button class="btn btn-primary mt-4" id="checkout-button" onclick="showCheckoutModal()">Checkout</button>
+  </div>
+
+  <!-- Product Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <img id="modal-product-img" src="" alt="" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+              <h5 id="modal-product-name" class="card-title"></h5>
+              <p id="modal-product-description" class="card-text"></p>
+              <p class="text-muted">Price: $<span id="modal-product-price"></span></p>
+              <div>
+                <label for="size">Select Size:</label>
+                <button class="btn btn-outline-primary btn-sm" onclick="selectSize('S')">S</button>
+                <button class="btn btn-outline-primary btn-sm" onclick="selectSize('M')">M</button>
+                <button class="btn btn-outline-primary btn-sm" onclick="selectSize('L')">L</button>
+                <button class="btn btn-outline-primary btn-sm" onclick="selectSize('XL')">XL</button>
+              </div>
+              <p id="modal-product-availability" class="text-success mt-3"></p>
+              <button type="button" class="btn btn-success mt-3" id="add-to-cart-button">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal fade" id="checkoutModal" tabindex="-1" role="dialog" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="checkoutModalLabel">Checkout Confirmation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>Products in your cart:</h5>
+          <div id="cart-items"></div>
+          <p id="total-price" class="mt-3"><strong>Total Price: $0.00</strong></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" onclick="confirmCheckout()">Confirm Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>Our Address</h5>
+          <p>Jl. Pondok Indah Mall, Jakarta, Indonesia</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Follow Us</h5>
+          <a href="https://instagram.com/yourusername" class="text-white" target="_blank">
+            <i class="fab fa-instagram fa-2x"></i> Instagram
+          </a>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact</h5>
+          <p>Email: info@jerseyku.com</p>
+          <p>Phone: +62 123 456 789</p>
+        </div>
+      </div>
+      <hr class="my-4" />
+      <p>&copy; 2025 JeRseYku. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Manchester United Jersey', price: 15.00, img: 'mu.jpg', description: 'Official Manchester United jersey with premium stitching and comfortable fit.', availability: 'In Stock' },
+      { id: 2, name: 'Barca Home Jersey', price: 12.50, img: '3.jpg', description: 'Official FC Barcelona X Cold Play home jersey for the 2024/25 season.', availability: 'Limited Stock' },
+      { id: 3, name: 'PSG Third Jersey', price: 20.00, img: 'psg.jpg', description: 'Iconic PSG away kit for 2024/25, featuring a modern streetwear design.', availability: 'Out of Stock' },
+      { id: 4, name: 'Chelsea Away Jersey', price: 18.00, img: 'chelsea.jpg', description: 'Official Chelsea FC away jersey, made for comfort and style.', availability: 'In Stock' },
+      { id: 5, name: 'Liverpool Home Jersey', price: 22.00, img: 'ipul.jpg', description: 'Liverpool FC home jersey for the current season, lightweight and breathable.', availability: 'Limited Stock' },
+      { id: 6, name: 'Juventus Away Jersey', price: 17.50, img: 'juve.jpg', description: 'Stylish Juventus home jersey for the 2022/25 season.', availability: 'In Stock' },
+      { id: 7, name: 'AC Milan Jersey', price: 19.00, img: 'acmilan.jpg', description: 'Official AC Milan jersey with advanced fabric technology.', availability: 'Out of Stock' },
+      { id: 8, name: 'Bayern Munich Jersey', price: 20.50, img: 'bayern.jpg', description: 'Bayern Munich Home jersey for the 2022/25 season.', availability: 'In Stock' },
+      { id: 9, name: 'Real Madrid Jersey', price: 23.00, img: '2.jpg', description: 'Real Madrid home jersey with a premium look and feel.', availability: 'Limited Stock' },
+      { id: 10, name: 'Tottenham Hotspur Jersey', price: 16.00, img: 'tot.jpg', description: 'Tottenham Hotspur away jersey with a sleek design.', availability: 'In Stock' },
+      { id: 11, name: 'Arsenal Away Jersey', price: 17.00, img: 'arsenal.jpg', description: 'Official Arsenal Home jersey for the 2022/25 season.', availability: 'Out of Stock' },
+      { id: 12, name: 'Borussia Dortmund Jersey', price: 21.00, img: 'bvb.jpg', description: 'Borussia Dortmund jersey with bold graphics and modern fit.', availability: 'In Stock' }
+    ];
+
+    let cart = [];
+
+    // Function to display products
+    function displayProducts() {
+      const productContainer = document.getElementById('product-container');
+      products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('col-md-4');
+        productCard.innerHTML = `
+          <div class="card mb-4" onclick="showProductDetails(${product.id})">
+            <img src="${product.img}" class="card-img-top" alt="${product.name}">
+            <div class="card-body">
+              <h5 class="card-title">${product.name}</h5>
+              <p class="card-text">${product.description}</p>
+              <p class="text-muted">$${product.price}</p>
+            </div>
+          </div>
+        `;
+        productContainer.appendChild(productCard);
+      });
+    }
+
+    // Function to show product details in the modal
+    function showProductDetails(productId) {
+      const product = products.find(p => p.id === productId);
+      document.getElementById('modal-product-img').src = product.img;
+      document.getElementById('modal-product-name').textContent = product.name;
+      document.getElementById('modal-product-description').textContent = product.description;
+      document.getElementById('modal-product-price').textContent = product.price;
+      document.getElementById('modal-product-availability').textContent = product.availability;
+      $('#productModal').modal('show');
+    }
+
+    // Function to add product to cart
+    function addToCart(product) {
+      cart.push(product);
+      updateCart();
+    }
+
+    // Function to update cart in the checkout modal
+    function updateCart() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      cartItemsContainer.innerHTML = '';
+      let totalPrice = 0;
+      cart.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.innerHTML = `<p>${item.name} - $${item.price}</p>`;
+        cartItemsContainer.appendChild(cartItem);
+        totalPrice += item.price;
+      });
+      document.getElementById('total-price').textContent = `Total Price: $${totalPrice.toFixed(2)}`;
+    }
+
+    // Function to confirm checkout
+    function confirmCheckout() {
+      alert('Checkout Confirmed!');
+      cart = [];
+      updateCart();
+      $('#checkoutModal').modal('hide');
+    }
+
+    // Display products when page loads
+    window.onload = displayProducts;
+  </script>
+</body>
+</html>
